@@ -10,6 +10,9 @@ import UIKit
 
 class LoginViewController: UIViewController {
     
+    var loginText: UITextField?
+    var passwordText: UITextField?
+    
     // Constants used in the LoginViewController
     struct Constants {
         static let backgroundColor: UIColor = UIColor(hue: 0.5389, saturation: 1, brightness: 0.92, alpha: 1.0)
@@ -25,10 +28,80 @@ class LoginViewController: UIViewController {
         
         // TODO: Add your views either as subviews of `view` or subviews of each other using `addSubview`
         
-        // TODO: layout your views using frames or AutoLayout
+        // Title
+        let loginTitleFrame = CGRect(x: 0, y: 20,
+                                     width: UIScreen.main.bounds.width,
+                                     height: 200)
+        let loginTitle = UILabel(frame: loginTitleFrame)
+        loginTitle.textAlignment = NSTextAlignment.center
+        loginTitle.font = UIFont(descriptor: UIFontDescriptor.init(), size: 30)
+        loginTitle.text = "Login"
+        loginTitle.textColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        
+        
+        // Holder
+        let contentFrame = CGRect(x: 0, y: 0,
+                                 width: UIScreen.main.bounds.width*9/10,
+                                 height: 300)
+        let contentHolder = UIView(frame: contentFrame)
+        contentHolder.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        contentHolder.layer.cornerRadius = 10
+        contentHolder.center = view.center
+
+        
+        
+        // Login Button
+        let buttonFrame = CGRect(x: contentFrame.width/2 - contentFrame.width*3/10, y: contentFrame.height - 90,
+                                 width: contentFrame.width*3/5,
+                                 height: 50)
+        let loginButton = UIButton(frame: buttonFrame)
+        loginButton.layer.cornerRadius = 10
+        loginButton.setTitle("Login", for: .normal)
+        loginButton.setTitleColor(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1), for: .normal)
+        loginButton.backgroundColor = Constants.backgroundColor
+        
+        // Login TextField
+        let textFrame = CGRect(x: 15, y: 0,
+                                 width: contentFrame.width,
+                                 height: 75)
+        loginText = UITextField(frame: textFrame)
+        loginText?.placeholder = "Username"
+        
+        // Login Password
+        let passwordFrame = CGRect(x: 15, y: 80,
+                                   width: contentFrame.width,
+                                   height: 75)
+        passwordText = UITextField(frame: passwordFrame)
+        passwordText?.placeholder = "Password"
+        
+        view.addSubview(loginTitle)
+        view.addSubview(contentHolder)
+        view.addSubview(loginButton)
+        contentHolder.addSubview(loginText!)
+        contentHolder.addSubview(passwordText!)
+        contentHolder.addSubview(loginButton)
+        
+        // This is how you link buttons to methods programmatically (if we
+        // were using a storyboard we would control drag to our IBAction instead)
+        // `addTarget` takes in 3 parameters
+        //     1. target: this is where the action method is defined (in our case,
+        //          this is our MainViewController, or self)
+        //     2. action: the method we want to be called when the button (or other
+        //          UI element) is interacted with
+        //     3. for: (controlEvents) here we tell Xcode when we want the action
+        //          to be called. In this case, I put ".touchDown" since I want
+        //          "goToNextView" to be called every time the user touches down on the button
+        loginButton.addTarget(self, action: #selector(login), for: .touchDown)
     }
     
     // TODO: create an IBAction for your login button
+    @IBAction func login(sender: UIButton) {
+        let username = loginText?.text
+        let password = passwordText?.text
+        authenticateUser(username: username, password: password)
+        
+    }
+    
     
     
     
